@@ -9,7 +9,8 @@ const request = options =>
         return reject(error);
       }
       if (!response.statusCode || response.statusCode !== 200) {
-        reject(error);
+        // eslint-disable-next-line prefer-promise-reject-errors
+        reject({ message: response.body, internalCode: response.statusCode });
       }
       return resolve(response);
     });
