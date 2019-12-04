@@ -1,4 +1,4 @@
-const { createHash } = require('./helpers/hash');
+const { createHash } = require('../helpers/hash');
 
 const User = (sequelize, DataTypes) => {
   sequelize.define(

@@ -1,5 +1,5 @@
 const requestPackage = require('request');
-const logger = require('../../logger');
+const logger = require('../logger');
 
 const request = options =>
   new Promise((resolve, reject) => {
