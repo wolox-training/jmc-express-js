@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const { createHash } = require('./helpers/hash');
 
 const User = (sequelize, DataTypes) => {
   sequelize.define(
@@ -17,12 +17,14 @@ const User = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notEmpty: true,
-          len: [1, 50]
+          len: [1, 50],
+          field: 'last_name'
         }
       },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
         validate: {
           isEmail: true,
           notEmpty: true,
@@ -35,21 +37,25 @@ const User = (sequelize, DataTypes) => {
         validate: {
           notEmpty: true
         }
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      UpdatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
       }
     },
     {
-      freezeTableName: true,
       indexes: [{ unique: true, fields: ['email'] }],
       hooks: {
-        beforeCreate: user => {
-          const salt = bcrypt.genSaltSync();
-          user.password = bcrypt.hashSync(user.password, salt);
-        }
-      },
-      instanceMethods: {
-        validPassword(password) {
-          return bcrypt.compareSync(password, this.password);
-        }
+        beforeCreate: createHash(this.password)
+          .then(hashedPw => {
+            this.password = hashedPw;
+            return this.save;
+          })
+          .catch()
       }
     }
   );
