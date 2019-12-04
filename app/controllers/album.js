@@ -1,4 +1,4 @@
-const { request } = require('./helpers/request');
+const { request } = require('../helpers/request');
 const API_URL = 'https://jsonplaceholder.typicode.com';
 
 const index = (_, res, next) => {

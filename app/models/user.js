@@ -1,12 +1,11 @@
-const { createHash } = require('../helpers/hash');
-
-const User = (sequelize, DataTypes) => {
-  sequelize.define(
-    'user',
+module.exports = (sequelize, DataTypes) => {
+  const model = sequelize.define(
+    'users',
     {
-      name: {
+      firstName: {
         type: DataTypes.STRING,
         allowNull: false,
+        field: 'first_name',
         validate: {
           notEmpty: true,
           len: [1, 50]
@@ -48,17 +47,8 @@ const User = (sequelize, DataTypes) => {
       }
     },
     {
-      indexes: [{ unique: true, fields: ['email'] }],
-      hooks: {
-        beforeCreate: createHash(this.password)
-          .then(hashedPw => {
-            this.password = hashedPw;
-            return this.save;
-          })
-          .catch()
-      }
+      indexes: [{ unique: true, fields: ['email'] }]
     }
   );
+  return model;
 };
-
-module.exports = User;

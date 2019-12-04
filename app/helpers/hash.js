@@ -1,7 +1,9 @@
 const bcrypt = require('bcrypt');
+const numSaltRounds = 10;
+
 exports.createHash = password =>
   new Promise((resolve, reject) =>
-    bcrypt.hash(password, 10, (err, hash) => {
+    bcrypt.hash(password, numSaltRounds, (err, hash) => {
       if (err) {
         return reject(err);
       }
